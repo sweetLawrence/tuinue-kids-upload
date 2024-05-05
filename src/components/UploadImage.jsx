@@ -1,38 +1,50 @@
 import React, { useState } from "react";
+import axios from "axios";
+import Spinner from "./Spinner";
 
 function UploadImage() {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState();
+  const [uploading, setUploading] = useState(false);
 
-  // Function to handle file selection
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+  const handleImageUpload = async () => {
+    // console.log(selectedImage);
+    setUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedImage);
+
+      formData.append("upload_preset", "xjm8f3xh");
+      let response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dvtvxlnrh/image/upload",
+        formData
+      );
+      const imageUrl = response.data.secure_url;
+      // console.log(imageUrl);
+
+      const pockethostResponse = await axios.post(
+        "https://offering.pockethost.io/api/collections/Gallery/records",
+        { url: imageUrl }
+      );
+      // console.log("Pockethost response:", pockethostResponse);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setUploading(false); 
     }
-  };
 
-  // Function to handle image upload
-  const handleImageUpload = () => {
-    // You can implement your upload logic here
-    // console.log("Upload image:", selectedImage);
-    alert("#")
-    // Reset selected image after upload
     setSelectedImage(null);
   };
+  // console.log(selectedImage);
 
   return (
     <div className="upload">
-      {/* Input for selecting image */}
       <div className="left">
         {" "}
         {selectedImage && (
           <div className="prev">
             <img
-              src={selectedImage}
+              src={selectedImage && URL.createObjectURL(selectedImage)}
               alt="Preview"
               style={{
                 maxWidth: "300px",
@@ -45,7 +57,9 @@ function UploadImage() {
         <input
           type="file"
           id="upload-input"
-          onChange={handleImageChange}
+          onChange={(event) => {
+            setSelectedImage(event.target.files[0]);
+          }}
           accept="image/*"
           style={{ display: "none" }} // Hide default input button
         />
@@ -53,11 +67,12 @@ function UploadImage() {
         <div className="btns">
           <label htmlFor="upload-input">Select Image</label>
           {selectedImage && (
-            <button className="upload-x" onClick={handleImageUpload}>Upload Image</button>
+            <button className="upload-x" onClick={handleImageUpload}>
+              {uploading ? <Spinner /> : "Upload"}
+            </button>
           )}
         </div>
       </div>
-  
     </div>
   );
 }

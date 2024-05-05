@@ -83,3 +83,21 @@ body{
     width: 80%;
   }
 }
+
+.spinner{
+  width: 14px;
+  height: 14px;
+  border: 2px solid white;
+  border-radius: 50%;
+  border-left-color: #10344c;
+  animation: spin forwards linear 1.5s infinite;
+}
+
+@keyframes spin {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
