@@ -23,7 +23,10 @@ function UploadImage() {
       // console.log(imageUrl);
 
       const pockethostResponse = await axios.post(
-        "https://offering.pockethost.io/api/collections/Gallery/records",
+        // https://offering.pockethost.io/api/collections/Gallery/records
+        
+
+        "https://tuinuekidsgallery.pockethost.io/api/collections/Tuinuekidsimages/records",
         { url: imageUrl }
       );
       // console.log("Pockethost response:", pockethostResponse);

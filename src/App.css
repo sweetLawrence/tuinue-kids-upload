@@ -23,6 +23,7 @@ body{
   /* box-shadow: 1px 1px 15px #eaeaff; */
   padding: .5em;
   background: #eaeaff;
+  /* position: relative; */
 }
 .upload .left label {
   /* position: absolute; */
@@ -36,6 +37,7 @@ body{
   border-radius: 5px;
   font-size: .9em;
   font-weight: 700;
+  
 }
 .upload .left .prev {
   /* border: 1px solid #10344c; */
